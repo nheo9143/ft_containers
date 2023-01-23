@@ -1,6 +1,6 @@
 #include <iostream>
 #include "enable_if.hpp"
-
+#include "vector.hpp"
 
 template <typename T> // enalbe_if_version
 void swap(T &a, T &b, typename ft::enable_if<!ft::is_integral<T>::vlaue, T >::type* = 0)
@@ -51,6 +51,21 @@ int main()
 	::swap(c1, c2);
 
 
-	/*  */
+	/* vector test */
+	ft::vector<int> v1;
+	ft::vector<int> v2(5, 10);
+	// ft::vector<int> v3(v2);
+
+	v1.push_back(1);
+	v1.push_back(2);
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+	std::cout << "v2.size() = " << v2.size() << std::endl;
+	v1.insert(v1.begin(), 3);
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+	v1.insert(v1.begin(), 4, 5);
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+	ft::vector<int>::iterator it = v1.begin();
+	// v1.insert(it, v2.begin(), v2.end()); -> not working...
+	// std::cout << "v3.size() = " << v3.size() << std::endl;
 	return 0;
 }
