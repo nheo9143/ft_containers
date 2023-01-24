@@ -1,6 +1,7 @@
 #include <iostream>
 #include "enable_if.hpp"
 #include "vector.hpp"
+#include <vector>
 
 template <typename T> // enalbe_if_version
 void swap(T &a, T &b, typename ft::enable_if<!ft::is_integral<T>::value, T >::type* = 0)
@@ -96,5 +97,14 @@ int main()
 	std::cout << std::endl << "---------------------assign test---------------------" << std::endl;
 	v1.assign(5, 10);
 	std::cout << "after assgin(5,10), v1.size() = " << v1.size() << std::endl;
+
+	/* swap test */
+	std::cout << std::endl << "---------------------swap test---------------------" << std::endl;
+	v2.clear();
+	std::cout << "before swap, v1.size() = " << v1.size() << std::endl;
+	std::cout << "before swap, v2.size() = " << v2.size() << std::endl;
+	v1.swap(v2);
+	std::cout << "after swap, v1.size() = " << v1.size() << std::endl;
+	std::cout << "after swap, v2.size() = " << v2.size() << std::endl;
 	return 0;
 }
