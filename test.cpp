@@ -3,7 +3,7 @@
 #include "vector.hpp"
 
 template <typename T> // enalbe_if_version
-void swap(T &a, T &b, typename ft::enable_if<!ft::is_integral<T>::vlaue, T >::type* = 0)
+void swap(T &a, T &b, typename ft::enable_if<!ft::is_integral<T>::value, T >::type* = 0)
 {
 	T temp;
 
@@ -50,22 +50,51 @@ int main()
 	::swap(b1, b2);
 	::swap(c1, c2);
 
+	/* real vector */
+	std::vector<int> rv1;
+	std::vector<int> rv2(5, 10);
+	std::cout << "rv2.size() = " << rv2.size() << std::endl;
+	std::vector<int> rv3(rv2.begin(), rv2.end());
 
-	/* vector test */
+
+	/* vector constructer test */
+	std::cout << std::endl << "---------------------my vector test---------------------" << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl << "---------------------constructer test---------------------" << std::endl;
 	ft::vector<int> v1;
 	ft::vector<int> v2(5, 10);
-	// ft::vector<int> v3(v2);
+	std::cout << "v2.size() = " << v2.size() << std::endl;
+	ft::vector<int> v3(v2.begin(), v2.end());
 
+	/* push_back test */
+	std::cout << std::endl << "---------------------push_back test---------------------" << std::endl;
 	v1.push_back(1);
 	v1.push_back(2);
 	std::cout << "v1.size() = " << v1.size() << std::endl;
-	std::cout << "v2.size() = " << v2.size() << std::endl;
+
+	/* insert test */
+	std::cout << std::endl << "---------------------insert test---------------------" << std::endl;
 	v1.insert(v1.begin(), 3);
 	std::cout << "v1.size() = " << v1.size() << std::endl;
 	v1.insert(v1.begin(), 4, 5);
 	std::cout << "v1.size() = " << v1.size() << std::endl;
+
+	/* erase test */
+	std::cout << std::endl << "---------------------erase test---------------------" << std::endl;
 	ft::vector<int>::iterator it = v1.begin();
-	// v1.insert(it, v2.begin(), v2.end()); -> not working...
-	// std::cout << "v3.size() = " << v3.size() << std::endl;
+	it++;
+	ft::vector<int>::iterator it2 = v1.erase(it);
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+	std::cout << "position of erased position: " << it2 - v1.begin() << std::endl;
+
+	v1.clear();
+	std::cout << std::endl << "after clear, v1.size() = " << v1.size() << std::endl;
+	v1.insert(it, v2.begin(), v2.end());
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+
+	/* assign test */
+	std::cout << std::endl << "---------------------assign test---------------------" << std::endl;
+	v1.assign(5, 10);
+	std::cout << "after assgin(5,10), v1.size() = " << v1.size() << std::endl;
 	return 0;
 }
