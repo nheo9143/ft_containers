@@ -2,6 +2,7 @@
 # define ITERATOR_HPP
 
 #include <iterator>
+#include "enable_if.hpp"
 
 namespace ft
 {
@@ -253,7 +254,7 @@ class reverse_iterator
         reverse_iterator() : _current() {}
         template <typename Iter>
         reverse_iterator(const reverse_iterator<Iter>& other) : _current(other.base()) {}
-        reverse_iterator(const reverse_iterator& other) : _current(other._it) {}
+        reverse_iterator(const reverse_iterator& other) : _current(other._current) {}
         reverse_iterator(const iterator_type& it) : _current(it) {}
 
         reverse_iterator& operator=(const reverse_iterator& other)
@@ -414,6 +415,18 @@ reverse_iterator<Iterator> operator-(typename reverse_iterator<Iterator>::differ
 {
     return reverse_iterator<Iterator>(it.base() + n);
 }
+
+template <typename Iterator>
+typename reverse_iterator<Iterator>::difference_type operator-(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
+{
+    return rhs.base() - lhs.base();
 }
 
+template <typename Iterator1, typename Iterator2>
+typename reverse_iterator<Iterator1>::difference_type operator-(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
+{
+    return rhs.base() - lhs.base();
+}
+
+}
 #endif
