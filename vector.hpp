@@ -1,10 +1,10 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-#include <vector>
 #include <memory>
 #include "iterator.hpp"
-#include <type_traits>
+#include "enable_if.hpp"
+#include "utils.hpp"
 
 namespace ft
 {
@@ -19,6 +19,7 @@ namespace ft
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
 			typedef typename allocator_type::difference_type difference_type;
+			typedef typename allocator_type::size_type size_type;
 
 			typedef typename ft::random_access_iterator<pointer> iterator;
 			typedef typename ft::random_access_iterator<const_pointer> const_iterator;
@@ -34,14 +35,6 @@ namespace ft
 		public:
 			/* constructer */
 			explicit vector(const allocator_type& a = allocator_type()) : _begin(NULL), _end(NULL), _end_cap(NULL), _a(a) {};
-			explicit vector(difference_type n, const allocator_type& a = allocator_type()) : _a(a)
-			{
-				_begin = _a.allocate(n);
-				_end = _begin;
-				_end_cap = _begin + n;
-				for (difference_type i = 0; i < n; i++)
-					_a.construct(_end++);
-			};
 			explicit vector(difference_type n, const value_type& val = value_type(), const allocator_type& a = allocator_type()) : _a(a)
 			{
 				_begin = _a.allocate(n);
@@ -53,9 +46,10 @@ namespace ft
 			template <typename InputIterator>
 			vector(InputIterator first, InputIterator last, const allocator_type& a = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, T >::type* = 0) : _a(a)
 			{
-				_begin = _a.allocate(last - first);
+				difference_type n = ft::difference(first, last);
+				_begin = _a.allocate(n);
 				_end = _begin;
-				_end_cap = _begin + (last - first);
+				_end_cap = _begin + n;
 				for (InputIterator it = first; it != last; it++)
 					_a.construct(_end++, *it);
 			};
@@ -131,7 +125,7 @@ namespace ft
 				}
 			};
 			void reserve(difference_type n) {
-				if (_end_cap - _begin == 0)
+				if ( !n && _end_cap == _begin)
 					n = 1;
 				if (n > capacity())
 				{
@@ -170,16 +164,17 @@ namespace ft
 			/* modifier */
 			template <class InputIterator>
 			void assign(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
+				difference_type n = ft::difference(first, last);
+				if (n > capacity())
+					reserve(n);
 				clear();
-				if (last - first > capacity())
-					reserve(last - first);
 				for (InputIterator it = first; it != last; it++)
 					_a.construct(_end++, *it);
 			};
 			void assign(difference_type n, const value_type& val) {
-				clear();
 				if (n > capacity())
 					reserve(n);
+				clear();
 				for (difference_type i = 0; i < n; i++)
 					_a.construct(_end++, val);
 			};
@@ -189,38 +184,42 @@ namespace ft
 				_a.construct(_end++, val);
 			};
 			void pop_back() {
-				_a.destroy(_end--);
+				if (_end != _begin)
+					_a.destroy(_end--);
 			};
 			iterator insert(iterator position, const value_type& val) {
 				difference_type to_pos = position - begin();
 				difference_type origin_size = size();
 				if (size() == capacity())
 					reserve(size() * 2);
+				difference_type origin_cap = capacity();
 				pointer tmp = _a.allocate(capacity());
 				for (difference_type i = 0; i < to_pos; i++)
 					_a.construct(tmp + i, _begin[i]);
 				_a.construct(tmp + to_pos, val);
+				for (difference_type i = to_pos; i < origin_size; i++)
+					_a.construct(tmp + i + 1, _begin[i]);
 				clear();
 				_a.deallocate(_begin, _end_cap - _begin);
 				_begin = tmp;
 				_end = _begin + origin_size + 1;
-				_end_cap = _begin + capacity();
+				_end_cap = _begin + origin_cap;
 				return iterator(_begin + to_pos);
 			};
 			void insert(iterator position, difference_type n, const value_type& val) {
 				difference_type to_pos = position - begin();
 				difference_type origin_size = size();
 				difference_type new_size = size() + n;
-				difference_type origin_cap = capacity();
 				if (size() + n > capacity())
 					reserve(size() + n);
+				difference_type origin_cap = capacity();
 				pointer tmp = _a.allocate(capacity());
 				for (difference_type i = 0; i < to_pos; i++)
 					_a.construct(tmp + i, _begin[i]);
-				for (difference_type i = to_pos; i < n; i++)
+				for (difference_type i = 0; i < n; i++)
 					_a.construct(tmp + i, val);
 				for (difference_type i = to_pos + n; i < new_size; i++)
-					_a.construct(tmp + i, _begin[i]);
+					_a.construct(tmp + i + n, _begin[i]);
 				clear();
 				_a.deallocate(_begin, _end_cap - _begin);
 				_begin = tmp;
@@ -229,18 +228,19 @@ namespace ft
 			};
 			template <class InputIterator>
 			void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
-				difference_type n = last - first;
-				if (size() + n > capacity())
-					reserve(size() + n);
+				difference_type n = ft::difference(first, last);
+				difference_type to_first = position - begin();
 				difference_type origin_size = size();
 				difference_type new_size = size() + n;
+				if (size() + n > capacity())
+					reserve(size() + n);
 				difference_type origin_cap = capacity();
-				difference_type to_first = position - begin();
 				pointer tmp = _a.allocate(capacity());
 				for (difference_type i = 0; i < to_first; i++)
 					_a.construct(tmp + i, _begin[i]);
+				InputIterator it = first;
 				for (difference_type i = 0; i < n; i++)
-					_a.construct(tmp + to_first + i, *(first + i));
+					_a.construct(tmp + to_first + i, *(it++));
 				for (difference_type i = to_first; i < origin_size; i++)
 					_a.construct(tmp + i + n, _begin[i]);
 				clear();
@@ -266,7 +266,7 @@ namespace ft
 				return iterator(_begin + to_pos);
 			};
 			iterator erase(iterator first, iterator last) {
-				difference_type n = last - first;
+				difference_type n = ft::difference(first, last);
 				difference_type to_first = first - begin();
 				difference_type origin_size = size();
 				difference_type origin_cap = capacity();
