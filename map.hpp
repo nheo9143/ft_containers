@@ -27,6 +27,18 @@ namespace ft
 			typedef typename ft::bidirectional_iterator<const_pointer>	const_iterator;
 			typedef typename ft::reverse_iterator<iterator>				reverse_iterator;
 			typedef typename ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+
+
+			class value_compare
+			{
+				friend class map;
+				protected:
+					key_compare comp;
+					value_compare(key_compare c) : comp(c) {};
+
+				public:
+					bool operator()(const value_type& x, const value_type& y) const { return comp(x.first, y.first); };
+			};
 	};
 }
 

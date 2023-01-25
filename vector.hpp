@@ -32,7 +32,7 @@ namespace ft
 			allocator_type	_a;
 
 		public:
-			/* constructer */
+			/* constructer, destructor, operator= */
 			explicit vector(const allocator_type& a = allocator_type()) : _begin(0), _end(0), _end_cap(0), _a(a) {};
 			explicit vector(difference_type n, const value_type& val = value_type(), const allocator_type& a = allocator_type()) : _begin(0), _end(0), _end_cap(0), _a(a)
 			{
