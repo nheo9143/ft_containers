@@ -54,7 +54,7 @@ namespace ft
 				}
 			};
 			template <typename InputIterator>
-			vector(InputIterator first, InputIterator last, const allocator_type& a = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, T>::type* = 0) : _a(a)
+			vector(InputIterator first, InputIterator last, const allocator_type& a = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, value_type>::type* = 0) : _a(a)
 			{
 				difference_type n = ft::difference(first, last);
 				try {
