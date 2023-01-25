@@ -34,7 +34,7 @@ namespace ft
 		public:
 			/* constructer, destructor, operator= */
 			explicit vector(const allocator_type& a = allocator_type()) : _begin(0), _end(0), _end_cap(0), _a(a) {};
-			explicit vector(difference_type n, const value_type& val = value_type(), const allocator_type& a = allocator_type()) : _begin(0), _end(0), _end_cap(0), _a(a)
+			explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& a = allocator_type()) : _begin(0), _end(0), _end_cap(0), _a(a)
 			{
 				try {
 					_begin = _a.allocate(n);
@@ -45,7 +45,7 @@ namespace ft
 				_end = _begin;
 				_end_cap = _begin + n;
 				try {
-					for (difference_type i = 0; i < n; i++)
+					for (size_type i = 0; i < n; i++)
 						_a.construct(_end++, val);
 				} catch(...) {
 					for (; _begin != _end; _end--)
@@ -54,9 +54,9 @@ namespace ft
 				}
 			};
 			template <typename InputIterator>
-			vector(InputIterator first, InputIterator last, const allocator_type& a = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, value_type>::type* = 0) : _a(a)
+			vector(InputIterator first, InputIterator last, const allocator_type& a = allocator_type(), typename enable_if<!is_integral<InputIterator>::value, value_type>::type* = 0) : _a(a)
 			{
-				difference_type n = ft::difference(first, last);
+				size_type n = difference(first, last);
 				try {
 					_begin = _a.allocate(n);
 				} catch(...) {
@@ -143,14 +143,11 @@ namespace ft
 			const_reverse_iterator rend() const { return const_reverse_iterator(begin()); };
 
 			/* capacity */
-			difference_type size() const { return _end - _begin; };
-			difference_type max_size() const { return _a.max_size(); };
-			difference_type capacity() const { return _end_cap - _begin; };
+			size_type size() const { return _end - _begin; };
+			size_type max_size() const { return _a.max_size(); };
+			size_type capacity() const { return _end_cap - _begin; };
 			bool empty() const { return _begin == _end; };
-			void resize(difference_type n, value_type val = value_type()) {
-				pointer origin_begin = _begin;
-				pointer origin_end = _end;
-				pointer origin_end_cap = _end_cap;
+			void resize(size_type n, value_type val = value_type()) {
 				pointer tmp;
 				if (n > size())
 				{
@@ -161,7 +158,7 @@ namespace ft
 						} catch(...) {
 							return ;
 						}
-						difference_type i = 0;
+						size_type i = 0;
 						try {
 							for (; i < size(); i++)
 								_a.construct(tmp + i, _begin[i]);
@@ -182,7 +179,7 @@ namespace ft
 					else
 					{
 						try {
-							for (difference_type i = size(); i < n; i++)
+							for (size_type i = size(); i < n; i++)
 								_a.construct(_end++, val);
 						} catch(...) {
 							for (; _begin != _end; _end--)
@@ -194,11 +191,11 @@ namespace ft
 				}
 				else
 				{
-					for (difference_type i = size(); i > n; i--)
+					for (size_type i = size(); i > n; i--)
 						_a.destroy(_end--);
 				}
 			};
-			void reserve(difference_type n) {
+			void reserve(size_type n) {
 				if ( !n && _end_cap == _begin)
 					n = 1;
 				pointer tmp;
@@ -209,8 +206,8 @@ namespace ft
 					} catch (...) {
 						return ;
 					}
-					difference_type origin_size = size();
-					difference_type i = 0;
+					size_type origin_size = size();
+					size_type i = 0;
 					try {
 						for (; i < origin_size; i++)
 							_a.construct(tmp + i, _begin[i]);
@@ -229,15 +226,15 @@ namespace ft
 			};
 
 			/* element access */
-			reference operator[](difference_type n) { return _begin[n]; };
-			const_reference operator[](difference_type n) const { return _begin[n]; };
-			reference at(difference_type n)
+			reference operator[](size_type n) { return _begin[n]; };
+			const_reference operator[](size_type n) const { return _begin[n]; };
+			reference at(size_type n)
 			{
 				if (n >= size())
 					throw std::out_of_range("out of range");
 				return _begin[n];
 			};
-			const_reference at(difference_type n) const
+			const_reference at(size_type n) const
 			{
 				if (n >= size())
 					throw std::out_of_range("out of range");
@@ -250,8 +247,8 @@ namespace ft
 
 			/* modifier */
 			template <class InputIterator>
-			void assign(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
-				difference_type n = ft::difference(first, last);
+			void assign(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = 0) {
+				size_type n = difference(first, last);
 				pointer new_vec;
 				try {
 					new_vec = _a.allocate(n);
@@ -275,7 +272,7 @@ namespace ft
 					return ;
 				}
 			};
-			void assign(difference_type n, const value_type& val) {
+			void assign(size_type n, const value_type& val) {
 				pointer new_vec;
 				try {
 					new_vec = _a.allocate(n);
@@ -284,7 +281,7 @@ namespace ft
 					return ;
 				}
 				clear();
-				difference_type i = 0;
+				size_type i = 0;
 				try {
 					for (; i < n; i++)
 						_a.construct(new_vec + i, val);
@@ -320,16 +317,16 @@ namespace ft
 					_a.destroy(_end--);
 			};
 			iterator insert(iterator position, const value_type& val) {
-				difference_type to_pos = position - begin();
-				difference_type origin_size = size();
-				difference_type new_cap = capacity() == 0 ? 1 : (capacity() == origin_size ? origin_size * 2 : capacity());
+				size_type to_pos = position - begin();
+				size_type origin_size = size();
+				size_type new_cap = capacity() == 0 ? 1 : (capacity() == origin_size ? origin_size * 2 : capacity());
 				pointer tmp;
 				try {
 					tmp = _a.allocate(new_cap);
 				} catch(...) {
 					return position;
 				}
-				difference_type i = 0;
+				size_type i = 0;
 				try {
 					for (; i < to_pos; i++)
 						_a.construct(tmp + i, _begin[i]);
@@ -349,19 +346,19 @@ namespace ft
 				_end_cap = _begin + new_cap;
 				return iterator(_begin + to_pos);
 			};
-			void insert(iterator position, difference_type n, const value_type& val) {
-				difference_type to_pos = position - begin();
-				difference_type origin_size = size();
-				difference_type new_size = origin_size + n;
-				difference_type new_cap = capacity() > new_size ? capacity() : new_size;
+			void insert(iterator position, size_type n, const value_type& val) {
+				size_type to_pos = position - begin();
+				size_type origin_size = size();
+				size_type new_size = origin_size + n;
+				size_type new_cap = capacity() > new_size ? capacity() : new_size;
 				pointer tmp;
 				try {
 					tmp = _a.allocate(new_cap);
 				} catch(...) {
 					return ;
 				}
-				difference_type i = 0;
-				difference_type j = 0;
+				size_type i = 0;
+				size_type j = 0;
 				try {
 					for (; i < to_pos; i++)
 						_a.construct(tmp + i, _begin[i]);
@@ -384,20 +381,20 @@ namespace ft
 				_end_cap = _begin + new_cap;
 			};
 			template <class InputIterator>
-			void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
-				difference_type n = ft::difference(first, last);
-				difference_type to_first = position - begin();
-				difference_type origin_size = size();
-				difference_type new_size = size() + n;
-				difference_type new_cap = capacity() > new_size ? capacity() : new_size;
+			void insert(iterator position, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = 0) {
+				size_type n = difference(first, last);
+				size_type to_first = position - begin();
+				size_type origin_size = size();
+				size_type new_size = size() + n;
+				size_type new_cap = capacity() > new_size ? capacity() : new_size;
 				pointer tmp;
 				try {
 					tmp = _a.allocate(new_cap);
 				} catch(...) {
 					return ;
 				}
-				difference_type i = 0;
-				difference_type j = 0;
+				size_type i = 0;
+				size_type j = 0;
 				try {
 					InputIterator it = first;
 					for (; i < to_first; i++)
@@ -421,16 +418,16 @@ namespace ft
 				_end_cap = _begin + new_cap;
 			};
 			iterator erase(iterator position) {
-				difference_type to_pos = position - begin();
-				difference_type origin_size = size();
-				difference_type origin_cap = capacity();
+				size_type to_pos = position - begin();
+				size_type origin_size = size();
+				size_type origin_cap = capacity();
 				pointer tmp;
 				try {
 					tmp = _a.allocate(origin_cap);
 				} catch(...) {
 					return position;
 				}
-				difference_type i = 0;
+				size_type i = 0;
 				try {
 					for (; i < to_pos; i++)
 						_a.construct(tmp + i, _begin[i]);
@@ -450,18 +447,18 @@ namespace ft
 				return iterator(_begin + to_pos);
 			};
 			iterator erase(iterator first, iterator last) {
-				difference_type n = ft::difference(first, last);
-				difference_type to_first = first - begin();
-				difference_type origin_size = size();
-				difference_type origin_cap = capacity();
+				size_type n = difference(first, last);
+				size_type to_first = first - begin();
+				size_type origin_size = size();
+				size_type origin_cap = capacity();
 				pointer tmp;
 				try {
 					tmp = _a.allocate(origin_cap);
 				} catch(...) {
 					return first;
 				}
-				difference_type i = 0;
-				difference_type j = 0;
+				size_type i = 0;
+				size_type j = 0;
 				try {
 					for (; i < to_first; i++)
 						_a.construct(tmp + i, _begin[i]);
@@ -494,7 +491,7 @@ namespace ft
 				x._end_cap = tmp;
 			};
 			void clear() {
-				for (difference_type i = 0; i < size(); i++)
+				for (size_type i = 0; i < size(); i++)
 					_a.destroy(_begin + i);
 				_end = _begin;
 			};
@@ -507,7 +504,7 @@ namespace ft
 	bool operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
 		if (lhs.size() != rhs.size())
 			return false;
-		for (typename vector<T, Alloc>::difference_type i = 0; i < lhs.size(); i++)
+		for (typename vector<T, Alloc>::size_type i = 0; i < lhs.size(); i++)
 			if (lhs[i] != rhs[i])
 				return false;
 		return true;
@@ -520,7 +517,7 @@ namespace ft
 
 	template <class T, class Alloc>
 	bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+		return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	}
 
 	template <class T, class Alloc>
