@@ -1,11 +1,8 @@
 #ifndef ITERATOR_HPP
 # define ITERATOR_HPP
 
-# include <iterator>
-
 namespace ft
 {
-
     struct input_iterator_tag {};
     struct output_iterator_tag {};
     struct forward_iterator_tag : input_iterator_tag {};
