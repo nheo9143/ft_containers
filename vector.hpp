@@ -37,24 +37,18 @@ namespace ft
 			explicit vector(const allocator_type& a = allocator_type()) : _begin(0), _end(0), _end_cap(0), _a(a) {};
 			explicit vector(difference_type n, const value_type& val = value_type(), const allocator_type& a = allocator_type()) : _begin(0), _end(0), _end_cap(0), _a(a)
 			{
-				try
-				{
+				try {
 					_begin = _a.allocate(n);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					_begin = 0;
 					return ;
 				}
 				_end = _begin;
 				_end_cap = _begin + n;
-				try
-				{
+				try {
 					for (difference_type i = 0; i < n; i++)
 						_a.construct(_end++, val);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					for (; _begin != _end; _end--)
 						_a.destroy(_end);
 					_a.deallocate(_begin, n);
@@ -64,24 +58,18 @@ namespace ft
 			vector(InputIterator first, InputIterator last, const allocator_type& a = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, T>::type* = 0) : _a(a)
 			{
 				difference_type n = ft::difference(first, last);
-				try
-				{
+				try {
 					_begin = _a.allocate(n);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					_begin = 0;
 					return ;
 				}
 				_end = _begin;
 				_end_cap = _begin + n;
-				try
-				{
+				try {
 					for (InputIterator it = first; it != last; it++)
 						_a.construct(_end++, *it);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					for (; _begin != _end; _end--)
 						_a.destroy(_end);
 					_a.deallocate(_begin, n);
@@ -89,24 +77,18 @@ namespace ft
 			};
 			vector(const vector& x) : _a(x._a)
 			{
-				try
-				{
+				try {
 					_begin = _a.allocate(x._end - x._begin);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					_begin = 0;
 					return ;
 				}
 				_end = _begin;
 				_end_cap = _begin + (x._end - x._begin);
-				try
-				{
+				try {
 					for (const_iterator it = x.begin(); it != x.end(); it++)
 						_a.construct(_end++, *it);					
-				}
-				catch(...)
-				{
+				} catch(...) {
 					for (; _begin != _end; _end--)
 						_a.destroy(_end);
 					_a.deallocate(_begin, x._end - x._begin);
@@ -126,12 +108,9 @@ namespace ft
 				{
 					clear();
 					_a.deallocate(_begin, _end_cap - _begin);
-					try
-					{
+					try {
 						_begin = _a.allocate(x._end - x._begin);
-					}
-					catch(...)
-					{
+					} catch(...) {
 						_begin = 0;
 						_end = 0;
 						_end_cap = 0;
@@ -139,13 +118,10 @@ namespace ft
 					}
 					_end = _begin;
 					_end_cap = _begin + (x._end - x._begin);
-					try
-					{
+					try {
 						for (const_iterator it = x.begin(); it != x.end(); it++)
 							_a.construct(_end++, *it);
-					}
-					catch (...)
-					{
+					} catch (...) {
 						for (; _begin != _end; _end--)
 							_a.destroy(_end);
 						_a.deallocate(_begin, x._end - x._begin);
@@ -181,28 +157,22 @@ namespace ft
 				{
 					if (n > capacity())
 					{
-						try
-						{
+						try {
 							tmp = _a.allocate(n);							
-						}
-						catch(...)
-						{
-							throw ;
+						} catch(...) {
+							return ;
 						}
 						difference_type i = 0;
-						try
-						{
+						try {
 							for (; i < size(); i++)
 								_a.construct(tmp + i, _begin[i]);
 							for (; i < n; i++)
 								_a.construct(tmp + i, val);
-						}
-						catch (...)
-						{
+						} catch (...) {
 							for (; i; i--)
 								_a.destroy(tmp + i);
 							_a.deallocate(tmp, n);
-							throw ;
+							return ;
 						}
 						clear();
 						_a.deallocate(_begin, _end_cap - _begin);
@@ -212,13 +182,10 @@ namespace ft
 					}
 					else
 					{
-						try
-						{
+						try {
 							for (difference_type i = size(); i < n; i++)
 								_a.construct(_end++, val);
-						}
-						catch(...)
-						{
+						} catch(...) {
 							for (; _begin != _end; _end--)
 								_a.destroy(_end);
 							_a.deallocate(_begin, _end_cap - _begin);
@@ -238,27 +205,21 @@ namespace ft
 				pointer tmp;
 				if (n > capacity())
 				{
-					try
-					{
+					try {
 						tmp = _a.allocate(n);
-					}
-					catch (...)
-					{
-						throw ;
+					} catch (...) {
+						return ;
 					}
 					difference_type origin_size = size();
 					difference_type i = 0;
-					try
-					{
+					try {
 						for (; i < origin_size; i++)
 							_a.construct(tmp + i, _begin[i]);
-					}
-					catch (...)
-					{
+					} catch (...) {
 						for (; i; i--)
 							_a.destroy(tmp + i);
 						_a.deallocate(tmp, n);
-						throw ;
+						return ;
 					}
 					clear();
 					_a.deallocate(_begin, _end_cap - _begin);
@@ -293,11 +254,9 @@ namespace ft
 			void assign(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 				difference_type n = ft::difference(first, last);
 				pointer new_vec;
-				try
-				{
+				try {
 					new_vec = _a.allocate(n);
-				}
-				catch (...)
+				} catch (...)
 				{
 					return ;
 				}
@@ -307,12 +266,10 @@ namespace ft
 				_end_cap = _begin + n;
 				clear();
 				InputIterator it = first;
-				try
-				{
+				try {
 					for (; it != last; it++)
 						_a.construct(_end++, *it);
-				}
-				catch (...)
+				} catch (...)
 				{
 					for (; it != first; it--)
 						_a.destroy(_end--);
@@ -321,22 +278,18 @@ namespace ft
 			};
 			void assign(difference_type n, const value_type& val) {
 				pointer new_vec;
-				try
-				{
+				try {
 					new_vec = _a.allocate(n);
-				}
-				catch (...)
+				} catch (...)
 				{
 					return ;
 				}
 				clear();
 				difference_type i = 0;
-				try
-				{
+				try {
 					for (; i < n; i++)
 						_a.construct(new_vec + i, val);
-				}
-				catch (...)
+				} catch (...)
 				{
 					for (; i; i--)
 						_a.destroy(new_vec + i);
@@ -350,20 +303,15 @@ namespace ft
 				_end_cap = _begin + n;
 			};
 			void push_back(const value_type& val) {
-				try
-				{
+				try {
 					if (_end_cap == _end)
 						reserve(size() * 2);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					return ;
 				}
-				try
-				{
+				try {
 					_a.construct(_end++, val);
-				}
-				catch (...)
+				} catch (...)
 				{
 					return ;
 				}
@@ -375,27 +323,21 @@ namespace ft
 			iterator insert(iterator position, const value_type& val) {
 				difference_type to_pos = position - begin();
 				difference_type origin_size = size();
-				difference_type origin_cap = capacity() == 0 ? 1 : (capacity() == origin_size ? origin_size * 2 : capacity());
+				difference_type new_cap = capacity() == 0 ? 1 : (capacity() == origin_size ? origin_size * 2 : capacity());
 				pointer tmp;
-				try
-				{
-					tmp = _a.allocate(origin_cap);
-				}
-				catch(...)
-				{
+				try {
+					tmp = _a.allocate(new_cap);
+				} catch(...) {
 					return position;
 				}
 				difference_type i = 0;
-				try
-				{
+				try {
 					for (; i < to_pos; i++)
 						_a.construct(tmp + i, _begin[i]);
 					_a.construct(tmp + to_pos, val);
 					for (; i < origin_size; i++)
 						_a.construct(tmp + i + 1, _begin[i]);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					for (; i; i--)
 						_a.destroy(tmp + i);
 					_a.deallocate(tmp, capacity());
@@ -405,36 +347,30 @@ namespace ft
 				_a.deallocate(_begin, _end_cap - _begin);
 				_begin = tmp;
 				_end = _begin + origin_size + 1;
-				_end_cap = _begin + origin_cap;
+				_end_cap = _begin + new_cap;
 				return iterator(_begin + to_pos);
 			};
 			void insert(iterator position, difference_type n, const value_type& val) {
 				difference_type to_pos = position - begin();
 				difference_type origin_size = size();
 				difference_type new_size = origin_size + n;
-				difference_type origin_cap = capacity() > new_size ? capacity() : new_size;
+				difference_type new_cap = capacity() > new_size ? capacity() : new_size;
 				pointer tmp;
-				try
-				{
-					tmp = _a.allocate(origin_cap);
-				}
-				catch(...)
-				{
+				try {
+					tmp = _a.allocate(new_cap);
+				} catch(...) {
 					return ;
 				}
 				difference_type i = 0;
 				difference_type j = 0;
-				try
-				{
+				try {
 					for (; i < to_pos; i++)
 						_a.construct(tmp + i, _begin[i]);
 					for (; j < n; j++)
 						_a.construct(tmp + j + to_pos, val);
 					for (; i < origin_size; i++)
 						_a.construct(tmp + i + n, _begin[i]);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					for (; i; i--)
 						_a.destroy(tmp + i + j);
 					for (; j; j--)
@@ -446,7 +382,7 @@ namespace ft
 				_a.deallocate(_begin, _end_cap - _begin);
 				_begin = tmp;
 				_end = _begin + new_size;
-				_end_cap = _begin + origin_cap;
+				_end_cap = _begin + new_cap;
 			};
 			template <class InputIterator>
 			void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
@@ -454,20 +390,16 @@ namespace ft
 				difference_type to_first = position - begin();
 				difference_type origin_size = size();
 				difference_type new_size = size() + n;
-				difference_type origin_cap = capacity() > new_size ? capacity() : new_size;
+				difference_type new_cap = capacity() > new_size ? capacity() : new_size;
 				pointer tmp;
-				try
-				{
-					tmp = _a.allocate(origin_cap);
-				}
-				catch(...)
-				{
+				try {
+					tmp = _a.allocate(new_cap);
+				} catch(...) {
 					return ;
 				}
 				difference_type i = 0;
 				difference_type j = 0;
-				try
-				{
+				try {
 					InputIterator it = first;
 					for (; i < to_first; i++)
 						_a.construct(tmp + i, _begin[i]);
@@ -475,9 +407,7 @@ namespace ft
 						_a.construct(tmp + i + j, *(it++));
 					for (; i < origin_size; i++)
 						_a.construct(tmp + i + n, _begin[i]);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					for (; i; i--)
 						_a.destroy(tmp + i + j);
 					for (; j; j--)
@@ -489,31 +419,25 @@ namespace ft
 				_a.deallocate(_begin, _end_cap - _begin);
 				_begin = tmp;
 				_end = _begin + new_size;
-				_end_cap = _begin + origin_cap;
+				_end_cap = _begin + new_cap;
 			};
 			iterator erase(iterator position) {
 				difference_type to_pos = position - begin();
 				difference_type origin_size = size();
 				difference_type origin_cap = capacity();
 				pointer tmp;
-				try
-				{
+				try {
 					tmp = _a.allocate(origin_cap);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					return position;
 				}
 				difference_type i = 0;
-				try
-				{
+				try {
 					for (; i < to_pos; i++)
 						_a.construct(tmp + i, _begin[i]);
 					for (; i + 1 < origin_size; i++)
 						_a.construct(tmp + i, _begin[i + 1]);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					for (; i; i--)
 						_a.destroy(tmp + i - 1);
 					_a.deallocate(tmp, origin_cap);
@@ -532,25 +456,19 @@ namespace ft
 				difference_type origin_size = size();
 				difference_type origin_cap = capacity();
 				pointer tmp;
-				try
-				{
+				try {
 					tmp = _a.allocate(origin_cap);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					return first;
 				}
 				difference_type i = 0;
 				difference_type j = 0;
-				try
-				{
+				try {
 					for (; i < to_first; i++)
 						_a.construct(tmp + i, _begin[i]);
 					for (j = last - iterator(_begin); j < origin_size; j++)
 						_a.construct(tmp + j - n, _begin[j]);
-				}
-				catch(...)
-				{
+				} catch(...) {
 					for (; j; j--)
 						_a.destroy(tmp + j - n);
 					for (; i; i--)
