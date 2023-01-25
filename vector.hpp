@@ -2,7 +2,6 @@
 # define VECTOR_HPP
 
 # include <memory>
-# include "iterator.hpp"
 # include "utils.hpp"
 
 namespace ft
