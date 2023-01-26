@@ -480,15 +480,9 @@ namespace ft
 				return iterator(_begin + to_first);
 			};
 			void swap(vector& x) {
-				pointer tmp = _begin;
-				_begin = x._begin;
-				x._begin = tmp;
-				tmp = _end;
-				_end = x._end;
-				x._end = tmp;
-				tmp = _end_cap;
-				_end_cap = x._end_cap;
-				x._end_cap = tmp;
+				ft::swap(_begin, x._begin);
+				ft::swap(_end, x._end);
+				ft::swap(_end_cap, x._end_cap);
 			};
 			void clear() {
 				for (size_type i = 0; i < size(); i++)
