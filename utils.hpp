@@ -5,6 +5,10 @@
 
 namespace ft
 {
+	template <class T> struct less {
+		bool operator() (const T& x, const T& y) const {return x<y;}
+	};
+
 	template <typename T>
 	void swap(T& a, T& b)
 	{
