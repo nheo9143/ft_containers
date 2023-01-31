@@ -54,7 +54,7 @@ namespace ft
 				}
 			};
 			template <typename InputIterator>
-			vector(InputIterator first, InputIterator last, const allocator_type& a = allocator_type(), typename enable_if<!is_integral<InputIterator>::value, value_type>::type* = 0) : _a(a)
+			explicit vector(InputIterator first, InputIterator last, const allocator_type& a = allocator_type(), typename enable_if<!is_integral<InputIterator>::value, value_type>::type* = 0) : _a(a)
 			{
 				size_type n = difference(first, last);
 				try {
@@ -74,7 +74,7 @@ namespace ft
 					_a.deallocate(_begin, n);
 				}
 			};
-			vector(const vector& x) : _a(x._a)
+			explicit vector(const vector& x) : _a(x._a)
 			{
 				try {
 					_begin = _a.allocate(x._end - x._begin);
@@ -252,8 +252,17 @@ namespace ft
 				pointer new_vec;
 				try {
 					new_vec = _a.allocate(n);
-				} catch (...)
-				{
+				} catch (...) {
+					return ;
+				}
+				InputIterator it = first;
+				try {
+					for (; it != last; it++)
+						_a.construct(_end++, *it);
+				} catch (...) {
+					for (; it != first; it--)
+						_a.destroy(_end--);
+					_a.deallocate(new_vec, n);
 					return ;
 				}
 				_a.deallocate(_begin, _end_cap - _begin);
@@ -261,23 +270,12 @@ namespace ft
 				_end = _begin + n;
 				_end_cap = _begin + n;
 				clear();
-				InputIterator it = first;
-				try {
-					for (; it != last; it++)
-						_a.construct(_end++, *it);
-				} catch (...)
-				{
-					for (; it != first; it--)
-						_a.destroy(_end--);
-					return ;
-				}
 			};
 			void assign(size_type n, const value_type& val) {
 				pointer new_vec;
 				try {
 					new_vec = _a.allocate(n);
-				} catch (...)
-				{
+				} catch (...) {
 					return ;
 				}
 				clear();
@@ -285,8 +283,7 @@ namespace ft
 				try {
 					for (; i < n; i++)
 						_a.construct(new_vec + i, val);
-				} catch (...)
-				{
+				} catch (...) {
 					for (; i; i--)
 						_a.destroy(new_vec + i);
 					_a.deallocate(new_vec, n);
@@ -307,8 +304,7 @@ namespace ft
 				}
 				try {
 					_a.construct(_end++, val);
-				} catch (...)
-				{
+				} catch (...) {
 					return ;
 				}
 			};
