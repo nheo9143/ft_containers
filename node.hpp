@@ -16,7 +16,7 @@ namespace ft
 			node*		_right;
 			bool		_color;
 
-			node(): _value(), _parent(0), _left(0), _right(0), _color(RED) {}
+			node() : _value(), _parent(0), _left(0), _right(0), _color(RED) {}
 
 			node(const T& value, node* parent = 0, node* left = 0, node* right = 0, bool color = RED) : _value(value), _parent(parent), _left(left), _right(right), _color(color) {}
 

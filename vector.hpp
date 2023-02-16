@@ -93,7 +93,7 @@ namespace ft
 					_a.deallocate(_begin, x._end - x._begin);
 				}
 			};
-			~vector()
+			virtual ~vector()
 			{
 				if (_begin)
 				{
@@ -196,7 +196,7 @@ namespace ft
 				}
 			};
 			void reserve(size_type n) {
-				if ( !n && _end_cap == _begin)
+				if (!n && _end_cap == _begin)
 					n = 1;
 				pointer tmp;
 				if (n > capacity())
@@ -256,20 +256,21 @@ namespace ft
 					return ;
 				}
 				InputIterator it = first;
+				size_type i = 0;
 				try {
 					for (; it != last; it++)
-						_a.construct(_end++, *it);
+						_a.construct(new_vec + i++, *it);
 				} catch (...) {
-					for (; it != first; it--)
-						_a.destroy(_end--);
+					for (; i; i--)
+						_a.destroy(new_vec + i);
 					_a.deallocate(new_vec, n);
 					return ;
 				}
+				clear();
 				_a.deallocate(_begin, _end_cap - _begin);
 				_begin = new_vec;
 				_end = _begin + n;
 				_end_cap = _begin + n;
-				clear();
 			};
 			void assign(size_type n, const value_type& val) {
 				pointer new_vec;
@@ -278,7 +279,6 @@ namespace ft
 				} catch (...) {
 					return ;
 				}
-				clear();
 				size_type i = 0;
 				try {
 					for (; i < n; i++)
