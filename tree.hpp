@@ -182,7 +182,7 @@ namespace ft
 				node_ptr origin_root = _root;
 				node_ptr parent = 0;
 				if (find(val) != end())
-					return (ft::make_pair(iterator(tmp), false));
+					return (ft::make_pair(find(val), false));
 				node_ptr new_node;
 				try	{
 					new_node = _alloc.allocate(1);
@@ -234,7 +234,7 @@ namespace ft
 				}
 			}
 
-			void	erase(iterator position) {
+			void	erase(const_iterator position) {
 				node_ptr tmp = position.base();
 				node_ptr to_delete = tmp;
 				if (to_delete == _end)
@@ -334,9 +334,9 @@ namespace ft
 				return (1);
 			}
 
-			void	erase(iterator first, iterator last) {
+			void	erase(const_iterator first, const_iterator last) {
 				while (first != last) {
-					iterator tmp = first;
+					const_iterator tmp = first;
 					++first;
 					erase(tmp);
 				}

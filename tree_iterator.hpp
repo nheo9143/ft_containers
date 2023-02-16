@@ -101,7 +101,7 @@ namespace ft
 	};
 
 	template <typename T>
-	class tree_const_iterator
+	class tree_const_iterator : public iterator<ft::bidirectional_iterator_tag, T>
 	{
 		private:
 			typedef node<T>	t_node;
