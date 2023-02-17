@@ -1,5 +1,5 @@
-FT_CONTAINERS = ft_container
-STD_CONTAINERS = std_container
+FT_CONTAINER = ft_container
+STD_CONTAINER = std_container
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 FT_SRCS = ft_container.cpp
 STD_SRCS = std_container.cpp
@@ -11,19 +11,19 @@ STD_OBJS = $(STD_SRCS:.cpp=.o)
 
 OBJS = $(FT_OBJS) $(STD_OBJS)
 
-all : $(FT_CONTAINERS) $(STD_CONTAINERS)
+all : $(FT_CONTAINER) $(STD_CONTAINER)
 
-$(FT_CONTAINERS) : $(FT_OBJS)
-		c++ $(CXXFLAGS) $(FT_OBJS) -o $(FT_CONTAINERS) $(INCLUDES)
+$(FT_CONTAINER) : $(FT_OBJS)
+		c++ $(CXXFLAGS) $(FT_OBJS) -o $(FT_CONTAINER) $(INCLUDES)
 
-$(STD_CONTAINERS) : $(STD_OBJS)
-		c++ $(CXXFLAGS) $(STD_OBJS) -o $(STD_CONTAINERS) $(INCLUDES)
+$(STD_CONTAINER) : $(STD_OBJS)
+		c++ $(CXXFLAGS) $(STD_OBJS) -o $(STD_CONTAINER) $(INCLUDES)
 
 clean :
 		rm -f $(OBJS)
 
 fclean : clean
-		rm -f $(NAME)
+		rm -f $(FT_CONTAINER) $(STD_CONTAINER)
 		rm -rf $(LOGS)
 
 re :
