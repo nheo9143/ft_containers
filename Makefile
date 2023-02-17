@@ -15,7 +15,7 @@ TIME_OBJS = $(TIME_SRCS:.cpp=.o)
 OBJS = $(FT_OBJS) $(STD_OBJS) $(TIME_OBJS)
 
 all : $(FT_CONTAINER) $(STD_CONTAINER) $(TIME_TEST)
-		mkdir logs
+
 $(FT_CONTAINER) : $(FT_OBJS)
 		c++ $(CXXFLAGS) $(FT_OBJS) -o $(FT_CONTAINER) $(INCLUDES)
 

@@ -3,6 +3,8 @@ GREEN="\033[0;32m"
 RED="\033[0;31m"
 BLACK="\033[0m"
 
+rm -rf logs
+mkdir logs
 ./ft_container
 ./std_container
 
