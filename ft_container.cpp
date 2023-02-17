@@ -43,16 +43,16 @@ int main2()
 {
 
 	/* enalbe_if_test */
-	unsigned int a1 = 1;
-	unsigned int a2 = 2;
-	int b1 = 3;
-	int b2 = 4;
-	std::string c1 = "hello";
-	std::string c2 = "world";
+	// unsigned int a1 = 1;
+	// unsigned int a2 = 2;
+	// int b1 = 3;
+	// int b2 = 4;
+	// std::string c1 = "hello";
+	// std::string c2 = "world";
 
-	::swap(a1, a2);
-	::swap(b1, b2);
-	::swap(c1, c2);
+	// ::swap(a1, a2);
+	// ::swap(b1, b2);
+	// ::swap(c1, c2);
 
 	std::ofstream	ofs("./logs/ft_vector.txt");
 	std::streambuf *origin = std::cout.rdbuf();
