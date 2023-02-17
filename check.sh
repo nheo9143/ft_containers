@@ -3,6 +3,9 @@ GREEN="\033[0;32m"
 RED="\033[0;31m"
 BLACK="\033[0m"
 
+./ft_container
+./std_container
+
 echo "----vector diff----"
 if diff logs/ft_vector.txt logs/std_vector.txt 1>/dev/null; then echo -e $GREEN "OK✅"; else echo -e $RED "KO❌"; diff logs/ft_vector.txt logs/std_vector.txt > logs/vector.diff; fi
 echo -e $BLACK
