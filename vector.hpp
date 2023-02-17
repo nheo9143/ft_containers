@@ -416,64 +416,27 @@ namespace ft
 			iterator erase(iterator position) {
 				size_type to_pos = position - begin();
 				size_type origin_size = size();
-				size_type origin_cap = capacity();
-				pointer tmp;
-				try {
-					tmp = _a.allocate(origin_cap);
-				} catch(...) {
-					return position;
+
+				for (size_type i = to_pos; i < origin_size - 1; i++) {
+					_a.destroy(_begin + i);
+					_begin[i] = _begin[i + 1];
 				}
-				size_type i = 0;
-				try {
-					for (; i < to_pos; i++)
-						_a.construct(tmp + i, _begin[i]);
-					for (; i + 1 < origin_size; i++)
-						_a.construct(tmp + i, _begin[i + 1]);
-				} catch(...) {
-					for (; i; i--)
-						_a.destroy(tmp + i - 1);
-					_a.deallocate(tmp, origin_cap);
-					return position;
-				}
-				clear();
-				_a.deallocate(_begin, _end_cap - _begin);
-				_begin = tmp;
-				_end = _begin + origin_size - 1;
-				_end_cap = _begin + origin_cap;
-				return iterator(_begin + to_pos);
+				_a.destroy(_begin + origin_size - 1);
+				_end--;
+				return position;
 			};
 			iterator erase(iterator first, iterator last) {
 				size_type n = difference(first, last);
 				size_type to_first = first - begin();
 				size_type origin_size = size();
-				size_type origin_cap = capacity();
-				pointer tmp;
-				try {
-					tmp = _a.allocate(origin_cap);
-				} catch(...) {
-					return first;
+				for (size_type i = to_first; i + n < origin_size; i++) {
+					_a.destroy(_begin + i);
+					_begin[i] = _begin[i + n];
 				}
-				size_type i = 0;
-				size_type j = 0;
-				try {
-					for (; i < to_first; i++)
-						_a.construct(tmp + i, _begin[i]);
-					for (j = last - iterator(_begin); j < origin_size; j++)
-						_a.construct(tmp + j - n, _begin[j]);
-				} catch(...) {
-					for (; j; j--)
-						_a.destroy(tmp + j - n);
-					for (; i; i--)
-						_a.destroy(tmp + i);
-					_a.deallocate(tmp, origin_cap);
-					return first;
-				}
-				clear();
-				_a.deallocate(_begin, _end_cap - _begin);
-				_begin = tmp;
-				_end = _begin + origin_size - n;
-				_end_cap = _begin + origin_cap;
-				return iterator(_begin + to_first);
+				for (size_type i = size() - n; i < origin_size; i++)
+					_a.destroy(_begin + i);
+				_end -= n;
+				return first;
 			};
 			void swap(vector& x) {
 				ft::swap(_begin, x._begin);
