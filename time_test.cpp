@@ -62,7 +62,7 @@ int main()
 	else
 		std::cout << PRINT_GREEN << "OK✅" << std::endl;
 
-	std::cout << "std::vector insert time : " << result2 << std::endl;
+	std::cout << "std::vector insert time : " << result1 << std::endl;
 	std::cout << "ft::vector insert time : " << result2 << std::endl;
 
 	std::cout << PRINT_RESET;
