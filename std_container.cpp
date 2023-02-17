@@ -1,0 +1,411 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <map>
+#include <stack>
+#include <set>
+
+template <typename T1, typename T2>
+void printPair(const std::pair<T1, T2>& pr)
+{
+	std::cout << "first: " << pr.first << " second: " << pr.second << std::endl;
+};
+
+int main2()
+{
+	std::ofstream	ofs("./logs/std_vector.txt");
+	std::streambuf *origin = std::cout.rdbuf();
+	std::cout.rdbuf(ofs.rdbuf());
+
+	/* vector constructer test */
+	std::cout << "---------------------constructer test---------------------" << std::endl;
+	std::vector<int> v1;
+	std::vector<int> v2(5, 10);
+	std::cout << "v2.size() = " << v2.size() << std::endl;
+	std::vector<int> v3(v2.begin(), v2.end());
+
+	/* push_back test */
+	std::cout << std::endl << "---------------------push_back test---------------------" << std::endl;
+	v1.push_back(1);
+	v1.push_back(2);
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+
+	/* insert test */
+	std::cout << std::endl << "---------------------insert test---------------------" << std::endl;
+	v1.insert(v1.begin(), 3);
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+	v1.insert(v1.begin(), 4, 5);
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+
+	/* erase test */
+	std::cout << std::endl << "---------------------erase test---------------------" << std::endl;
+	std::vector<int>::iterator it = v1.begin();
+	it++;
+	std::vector<int>::iterator it2 = v1.erase(it);
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+	std::cout << "position of erased position: " << it2 - v1.begin() << std::endl;
+
+	v1.clear();
+	std::cout << std::endl << "after clear, v1.size() = " << v1.size() << std::endl;
+	v1.insert(v1.begin(), v2.begin(), v2.end());
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+
+	/* assign test */
+	std::cout << std::endl << "---------------------assign test---------------------" << std::endl;
+	v1.assign(5, 10);
+	std::cout << "after assgin(5,10), v1.size() = " << v1.size() << std::endl;
+	v1.assign(v2.begin(), v2.end());
+	std::cout << "after assgin(v2.begin(), v2.end()), v1.size() = " << v1.size() << std::endl;
+	v2.assign(v1.begin(), v1.end());
+	std::cout << "after assgin(v1.begin(), v1.end()), v2.size() = " << v2.size() << std::endl;
+	std::vector<int> v4(4);
+	for (int i = 0; i < 4; i++)
+		v4[i] = i * 5;
+	std::vector<int> v5;
+	v5.assign(v4.begin(), v4.end());
+	std::cout << "after assgin(v2.begin(), v2.end()), v5.size() = " << v5.size() << std::endl;
+
+	/* swap test */
+	std::cout << std::endl << "---------------------swap test---------------------" << std::endl;
+	v2.clear();
+	std::cout << "before swap, v1.size() = " << v1.size() << std::endl;
+	std::cout << "before swap, v2.size() = " << v2.size() << std::endl;
+	v1.swap(v2);
+	std::cout << "after swap, v1.size() = " << v1.size() << std::endl;
+	std::cout << "after swap, v2.size() = " << v2.size() << std::endl;
+
+	/* iterator test */
+	std::cout << std::endl << "---------------------iterator test---------------------" << std::endl;
+	v3.push_back(1);
+	v3.push_back(2);
+	v3.push_back(3);
+	v3.push_back(4);
+	v3.push_back(5);
+	for (std::vector<int>::iterator it = v3.begin(); it != v3.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (std::vector<int>::reverse_iterator it = v3.rbegin(); it != v3.rend(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	/* reverse_iterator test */
+	std::cout << std::endl << "---------------------reverse_iterator test---------------------" << std::endl;
+	std::vector<int>::reverse_iterator rit = v3.rbegin();
+	std::cout << "v3.rbegin() = " << *rit << std::endl;
+	rit++;
+	std::cout << "v3.rbegin()++ = " << *rit << std::endl;
+	rit--;
+	std::cout << "v3.rbegin()-- = " << *rit << std::endl;
+	rit += 2;
+	std::cout << "v3.rbegin() += 2 = " << *rit << std::endl;
+
+	std::cout.rdbuf(origin);
+	ofs.close();
+
+	ofs.open("./logs/std_map.txt");
+	std::cout.rdbuf(ofs.rdbuf());
+
+	/* map test */
+	std::cout << "---------------------map test---------------------" << std::endl;
+
+	/* constructer test */
+	std::cout << std::endl << "---------------------constructer test---------------------" << std::endl;
+	std::map<int, int> mp;
+	std::map<int, std::string> mp2;
+	mp.insert(std::pair<int, int>(1, 0));
+	mp.insert(std::pair<int, int>(10, 0));
+	std::map<int, int> mp4(mp);
+	std::map<int, int> mp5(mp.begin(), mp.end());
+
+	/* insert test */
+	std::cout << std::endl << "---------------------insert test---------------------" << std::endl;
+	mp.insert(std::pair<int, int>(5, 0));
+	mp.insert(std::pair<int, int>(3, 0));
+	mp.insert(std::pair<int, int>(7, 0));
+	mp.insert(std::pair<int, int>(9, 0));
+	mp.insert(std::pair<int, int>(8, 0));
+	mp.insert(std::pair<int, int>(6, 0));
+	mp.insert(std::pair<int, int>(4, 0));
+	mp.insert(std::pair<int, int>(2, 0));
+	std::pair<std::map<int, std::string>::iterator, bool> mit1 = mp2.insert(std::pair<int, std::string>(42, "lol"));
+	std::pair<std::map<int, std::string>::iterator, bool> mit2 = mp2.insert(std::pair<int, std::string>(42, "mdr"));
+	std::pair<std::map<int, std::string>::iterator, bool> mit3 = mp2.insert(std::pair<int, std::string>(50, "mdr"));
+	std::pair<std::map<int, std::string>::iterator, bool> mit4 = mp2.insert(std::pair<int, std::string>(35, "funny"));
+	std::pair<std::map<int, std::string>::iterator, bool> mit5 = mp2.insert(std::pair<int, std::string>(35, "bunny"));
+	std::pair<std::map<int, std::string>::iterator, bool> mit6 = mp2.insert(std::pair<int, std::string>(21, "fizz"));
+	std::pair<std::map<int, std::string>::iterator, bool> mit7 = mp2.insert(std::pair<int, std::string>(38, "buzz"));
+	printPair(*mit1.first);
+	std::cout << std::boolalpha;
+	std::cout << "inserted? " << mit1.second << std::endl;
+	printPair(*mit2.first);
+	std::cout << "inserted? " << mit2.second << std::endl;
+	printPair(*mit3.first);
+	std::cout << "inserted? " << mit3.second << std::endl;
+	printPair(*mit4.first);
+	std::cout << "inserted? " << mit4.second << std::endl;
+	printPair(*mit5.first);
+	std::cout << "inserted? " << mit5.second << std::endl;
+	printPair(*mit6.first);
+	std::cout << "inserted? " << mit6.second << std::endl;
+	printPair(*mit7.first);
+	std::cout << "inserted? " << mit7.second << std::endl;
+
+	/* erase test */
+	std::cout << std::endl << "---------------------erase test---------------------" << std::endl;
+	std::map<int, std::string> mp3;
+	mp3.insert(mp2.begin(), mp2.end());
+	mp3[5] = "HI";
+	mp3[4] = "...";
+	mp3[1] = "\"\"";
+	mp3[100] = "WOW";
+	mp3[10] = "10";
+	mp3.clear();
+	for (int i = 0; i < 10; i++) {
+		mp3.insert(std::pair<int, std::string>(i, "123"));
+	}
+	std::map<int, std::string>::iterator mitt = mp3.begin();
+	mp3.erase(++(++mitt));
+	mp3.erase(--(--mp3.end()));
+	mp3.erase(--(--mp3.end()), mp3.end());
+	mp3.erase(++mp3.begin());
+	mp3.erase(mp3.begin());
+	mp3.erase(--mp3.end());
+	mp3.erase(mp3.begin(), ++(++(++mp3.begin())));
+	mp3[11] = "101";
+	mp3[10] = "100";
+	std::cout << std::endl;
+	for (std::map<int, std::string>::iterator mitt = mp3.begin(); mitt != mp3.end(); mitt++)
+		printPair(*mitt);
+
+	/* iterator test */
+	std::cout << std::endl << "---------------------iterator test---------------------" << std::endl;
+	for (std::map<int, std::string>::iterator itt = mp2.begin(); itt != mp2.end(); itt++) {
+		std::cout << "node: " << (*itt).first << " " << (*itt).second << std::endl;
+	}
+	/* reverse iterator test */
+	std::cout << std::endl << "---------------------reverse iterator test---------------------" << std::endl;
+	for (std::map<int, std::string>::reverse_iterator itt = mp2.rbegin(); itt != mp2.rend(); itt++) {
+		std::cout << "node: " << (*itt).first << " " << (*itt).second << std::endl;
+	}
+	/* find test */
+	std::cout << std::endl << "---------------------find test---------------------" << std::endl;
+	std::map<int, std::string>::iterator it4 = mp2.find(21);
+	std::map<int, std::string>::iterator it5 = mp2.find(38);
+	std::map<int, std::string>::iterator it6 = mp2.find(100);
+	std::map<int, std::string>::iterator it7 = mp2.find(0);
+	std::map<int, std::string>::iterator it8 = mp2.find(1);
+	std::cout << "it4: " << it4->first << " " << it4->second << std::endl;
+	std::cout << "it5: " << it5->first << " " << it5->second << std::endl;
+	std::cout << "it6: " << it6->first << " " << it6->second << std::endl;
+	std::cout << "it7: " << it7->first << " " << it7->second << std::endl;
+	std::cout << "it8: " << it8->first << " " << it8->second << std::endl;
+	/* count test */
+	std::cout << std::endl << "---------------------count test---------------------" << std::endl;
+	std::cout << "count 21: " << mp2.count(21) << std::endl;
+	std::cout << "count 38: " << mp2.count(38) << std::endl;
+	std::cout << "count 100: " << mp2.count(100) << std::endl;
+	std::cout << "count 0: " << mp2.count(0) << std::endl;
+	std::cout << "count 1: " << mp2.count(1) << std::endl;
+	/* lower bound test */
+	std::cout << std::endl << "---------------------lower bound test---------------------" << std::endl;
+	std::map<int, std::string>::iterator it9 = mp2.lower_bound(21);
+	std::map<int, std::string>::iterator it10 = mp2.lower_bound(38);
+	std::map<int, std::string>::iterator it11 = mp2.lower_bound(100);
+	std::cout << "it9: " << it9->first << " " << it9->second << std::endl;
+	std::cout << "it10: " << it10->first << " " << it10->second << std::endl;
+	std::cout << "it11: " << it11->first << " " << it11->second << std::endl;
+	/* upper bound test */
+	std::cout << std::endl << "---------------------upper bound test---------------------" << std::endl;
+	std::map<int, std::string>::iterator it12 = mp2.upper_bound(21);
+	std::map<int, std::string>::iterator it13 = mp2.upper_bound(38);
+	std::map<int, std::string>::iterator it14 = mp2.upper_bound(100);
+	std::cout << "it12: " << it12->first << " " << it12->second << std::endl;
+	std::cout << "it13: " << it13->first << " " << it13->second << std::endl;
+	std::cout << "it14: " << it14->first << " " << it14->second << std::endl;
+	/* equal range test */
+	std::cout << std::endl << "---------------------equal range test---------------------" << std::endl;
+	std::pair<std::map<int, std::string>::iterator, std::map<int, std::string>::iterator> pr1 = mp2.equal_range(21);
+	std::pair<std::map<int, std::string>::iterator, std::map<int, std::string>::iterator> pr2 = mp2.equal_range(38);
+	std::pair<std::map<int, std::string>::iterator, std::map<int, std::string>::iterator> pr3 = mp2.equal_range(100);
+	std::cout << "pr1: " << pr1.first->first << " " << pr1.first->second << " " << pr1.second->first << " " << pr1.second->second << std::endl;
+	std::cout << "pr2: " << pr2.first->first << " " << pr2.first->second << " " << pr2.second->first << " " << pr2.second->second << std::endl;
+	std::cout << "pr3: " << pr3.first->first << " " << pr3.first->second << " " << pr3.second->first << " " << pr3.second->second << std::endl;
+
+	std::cout.rdbuf(origin);
+	ofs.close();
+
+	ofs.open("./logs/std_stack.txt");
+	std::cout.rdbuf(ofs.rdbuf());
+
+	/* stack test */
+	std::cout << std::endl << "---------------------stack test---------------------" << std::endl;
+
+	/* constructor test */
+	std::cout << std::endl << "---------------------constructor test---------------------" << std::endl;
+	std::stack<int> st1;
+	st1.push(1);
+	std::stack<int> st2(st1);
+	std::stack<int> st3;
+
+	/* empty test */
+	std::cout << std::endl << "---------------------empty test---------------------" << std::endl;
+	std::cout << "st1 empty: " << st1.empty() << std::endl;
+	std::cout << "st2 empty: " << st2.empty() << std::endl;
+	std::cout << "st3 empty: " << st3.empty() << std::endl;
+
+	/* push test */
+	std::cout << std::endl << "---------------------push test---------------------" << std::endl;
+	st3.push(2);
+	st3.push(3);
+	st3.push(4);
+
+	/* size test */
+	std::cout << std::endl << "---------------------size test---------------------" << std::endl;
+	std::cout << "st1 size: " << st1.size() << std::endl;
+	std::cout << "st2 size: " << st2.size() << std::endl;
+	std::cout << "st3 size: " << st3.size() << std::endl;
+
+	/* top test */
+	std::cout << std::endl << "---------------------top test---------------------" << std::endl;
+	std::cout << "st1 top: " << st1.top() << std::endl;
+	std::cout << "st2 top: " << st2.top() << std::endl;
+	std::cout << "st3 top: " << st3.top() << std::endl;
+
+	/* pop test */
+	std::cout << std::endl << "---------------------pop test---------------------" << std::endl;
+	st3.pop();
+	std::cout << "st3 top: " << st3.top() << std::endl;
+	st3.pop();
+	std::cout << "st3 top: " << st3.top() << std::endl;
+	st3.pop();
+	std::cout << "st3 empty: " << st3.empty() << std::endl;
+
+	std::cout.rdbuf(origin);
+	ofs.close();
+
+	ofs.open("./logs/std_set.txt");
+	std::cout.rdbuf(ofs.rdbuf());
+
+	/* set test */
+	std::cout << std::endl << "---------------------set test---------------------" << std::endl;
+
+	/* constructor test */
+	std::cout << std::endl << "---------------------constructor test---------------------" << std::endl;
+	std::set<int> s1;
+	s1.insert(1);
+	s1.insert(2);
+	s1.insert(3);
+	std::set<int> s2(s1);
+	std::set<int> s3(s2.begin(), s2.end());
+
+	/* iterator test */
+	std::cout << std::endl << "---------------------iterator test---------------------" << std::endl;
+	for (std::set<int>::iterator it = s3.begin(); it != s3.end(); it++) {
+		std::cout << "value: " << *it << std::endl;
+	}
+	/* reverse iterator test */
+	std::cout << std::endl << "---------------------reverse iterator test---------------------" << std::endl;
+	for (std::set<int>::reverse_iterator it = s3.rbegin(); it != s3.rend(); it++) {
+		std::cout << "value: " << *it << std::endl;
+	}
+	/* empty test */
+	std::cout << std::endl << "---------------------empty test---------------------" << std::endl;
+	std::cout << "s1.empty(): " << s1.empty() << std::endl;
+	std::cout << "s2.empty(): " << s2.empty() << std::endl;
+	std::cout << "s3.empty(): " << s3.empty() << std::endl;
+	/* size test */
+	std::cout << std::endl << "---------------------size test---------------------" << std::endl;
+	std::cout << "s1.size(): " << s1.size() << std::endl;
+	std::cout << "s2.size(): " << s2.size() << std::endl;
+	std::cout << "s3.size(): " << s3.size() << std::endl;
+
+	/* max size test */
+	std::cout << std::endl << "---------------------max size test---------------------" << std::endl;
+	std::cout << "s1.max_size(): " << s1.max_size() << std::endl;
+	std::cout << "s2.max_size(): " << s2.max_size() << std::endl;
+	std::cout << "s3.max_size(): " << s3.max_size() << std::endl;
+	/* insert test */
+	std::cout << std::endl << "---------------------insert test---------------------" << std::endl;
+	std::set<int> s4;
+	s4.insert(1);
+	s4.insert(2);
+	s4.insert(3);
+	s4.insert(4);
+	s4.insert(5);
+	s4.insert(6);
+	std::set<int> s5;
+	s5.insert(s4.begin(), s4.end());
+	for (std::set<int>::iterator it = s5.begin(); it != s5.end(); it++) {
+		std::cout << "value: " << *it << std::endl;
+	}
+	/* erase test */
+	std::cout << std::endl << "---------------------erase test---------------------" << std::endl;
+	s5.erase(1);
+	s5.erase(2);
+	s5.erase(3);
+	s5.erase(4);
+	s5.erase(5);
+	s5.erase(6);
+	for (std::set<int>::iterator it = s5.begin(); it != s5.end(); it++) {
+		std::cout << "value: " << *it << std::endl;
+	}
+	/* swap test */
+	std::cout << std::endl << "---------------------swap test---------------------" << std::endl;
+	s5.swap(s4);
+	for (std::set<int>::iterator it = s5.begin(); it != s5.end(); it++) {
+		std::cout << "value: " << *it << std::endl;
+	}
+	/* clear test */
+	std::cout << std::endl << "---------------------clear test---------------------" << std::endl;
+	s5.clear();
+	for (std::set<int>::iterator it = s5.begin(); it != s5.end(); it++) {
+		std::cout << "value: " << *it << std::endl;
+	}
+	/* key comp test */
+	std::cout << std::endl << "---------------------key comp test---------------------" << std::endl;
+	std::set<int>::key_compare kc = s5.key_comp();
+	std::cout << "kc(1, 2): " << kc(1, 2) << std::endl;
+	std::cout << "kc(2, 1): " << kc(2, 1) << std::endl;
+	std::cout << "kc(1, 1): " << kc(1, 1) << std::endl;
+	/* value comp test */
+	std::cout << std::endl << "---------------------value comp test---------------------" << std::endl;
+	std::set<int>::value_compare vc = s5.value_comp();
+	std::cout << "vc(1, 2): " << vc(1, 2) << std::endl;
+	std::cout << "vc(2, 1): " << vc(2, 1) << std::endl;
+	std::cout << "vc(1, 1): " << vc(1, 1) << std::endl;
+	/* find test */
+	std::cout << std::endl << "---------------------find test---------------------" << std::endl;
+	s5.insert(1);
+	s5.insert(2);
+	s5.insert(3);
+	s5.insert(4);
+	s5.insert(5);
+	s5.insert(6);
+	std::set<int>::iterator sit = s5.find(3);
+	std::cout << "value: " << *sit << std::endl;
+	/* count test */
+	std::cout << std::endl << "---------------------count test---------------------" << std::endl;
+	std::cout << "s5.count(3): " << s5.count(3) << std::endl;
+	std::cout << "s5.count(4): " << s5.count(4) << std::endl;
+	std::cout << "s5.count(5): " << s5.count(5) << std::endl;
+	std::cout << "s5.count(6): " << s5.count(6) << std::endl;
+	std::cout << "s5.count(7): " << s5.count(7) << std::endl;
+	/* lower bound test */
+	std::cout << std::endl << "---------------------lower bound test---------------------" << std::endl;
+	sit = s5.lower_bound(3);
+	std::cout << "value: " << *sit << std::endl;
+	/* upper bound test */
+	std::cout << std::endl << "---------------------upper bound test---------------------" << std::endl;
+	sit = s5.upper_bound(3);
+	std::cout << "value: " << *sit << std::endl;
+
+	std::cout.rdbuf(origin);
+	ofs.close();
+	return 0;
+}
+
+int main()
+{
+	main2();
+	return 0;
+}
