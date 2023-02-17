@@ -237,11 +237,16 @@ int main2()
 	ft::map<int, std::string>::iterator it6 = mp2.find(100);
 	ft::map<int, std::string>::iterator it7 = mp2.find(0);
 	ft::map<int, std::string>::iterator it8 = mp2.find(1);
-	std::cout << "it4: " << it4->first << " " << it4->second << std::endl;
-	std::cout << "it5: " << it5->first << " " << it5->second << std::endl;
-	std::cout << "it6: " << it6->first << " " << it6->second << std::endl;
-	std::cout << "it7: " << it7->first << " " << it7->second << std::endl;
-	std::cout << "it8: " << it8->first << " " << it8->second << std::endl;
+	if (it4 != mp2.end())
+		std::cout << "it4: " << it4->first << " " << it4->second << std::endl;
+	if (it5 != mp2.end())
+		std::cout << "it5: " << it5->first << " " << it5->second << std::endl;
+	if (it6 != mp2.end())
+		std::cout << "it6: " << it6->first << " " << it6->second << std::endl;
+	if (it7 != mp2.end())
+		std::cout << "it7: " << it7->first << " " << it7->second << std::endl;
+	if (it8 != mp2.end())
+		std::cout << "it8: " << it8->first << " " << it8->second << std::endl;
 	/* count test */
 	std::cout << std::endl << "---------------------count test---------------------" << std::endl;
 	std::cout << "count 21: " << mp2.count(21) << std::endl;
@@ -254,25 +259,34 @@ int main2()
 	ft::map<int, std::string>::iterator it9 = mp2.lower_bound(21);
 	ft::map<int, std::string>::iterator it10 = mp2.lower_bound(38);
 	ft::map<int, std::string>::iterator it11 = mp2.lower_bound(100);
-	std::cout << "it9: " << it9->first << " " << it9->second << std::endl;
-	std::cout << "it10: " << it10->first << " " << it10->second << std::endl;
-	std::cout << "it11: " << it11->first << " " << it11->second << std::endl;
+	if (it9 != mp2.end())
+		std::cout << "it9: " << it9->first << " " << it9->second << std::endl;
+	if (it10 != mp2.end())
+		std::cout << "it10: " << it10->first << " " << it10->second << std::endl;
+	if (it11 != mp2.end())
+		std::cout << "it11: " << it11->first << " " << it11->second << std::endl;
 	/* upper bound test */
 	std::cout << std::endl << "---------------------upper bound test---------------------" << std::endl;
 	ft::map<int, std::string>::iterator it12 = mp2.upper_bound(21);
 	ft::map<int, std::string>::iterator it13 = mp2.upper_bound(38);
 	ft::map<int, std::string>::iterator it14 = mp2.upper_bound(100);
-	std::cout << "it12: " << it12->first << " " << it12->second << std::endl;
-	std::cout << "it13: " << it13->first << " " << it13->second << std::endl;
-	std::cout << "it14: " << it14->first << " " << it14->second << std::endl;
+	if (it12 != mp2.end())
+		std::cout << "it12: " << it12->first << " " << it12->second << std::endl;
+	if (it13 != mp2.end())
+		std::cout << "it13: " << it13->first << " " << it13->second << std::endl;
+	if (it14 != mp2.end())
+		std::cout << "it14: " << it14->first << " " << it14->second << std::endl;
 	/* equal range test */
 	std::cout << std::endl << "---------------------equal range test---------------------" << std::endl;
 	ft::pair<ft::map<int, std::string>::iterator, ft::map<int, std::string>::iterator> pr1 = mp2.equal_range(21);
 	ft::pair<ft::map<int, std::string>::iterator, ft::map<int, std::string>::iterator> pr2 = mp2.equal_range(38);
 	ft::pair<ft::map<int, std::string>::iterator, ft::map<int, std::string>::iterator> pr3 = mp2.equal_range(100);
-	std::cout << "pr1: " << pr1.first->first << " " << pr1.first->second << " " << pr1.second->first << " " << pr1.second->second << std::endl;
-	std::cout << "pr2: " << pr2.first->first << " " << pr2.first->second << " " << pr2.second->first << " " << pr2.second->second << std::endl;
-	std::cout << "pr3: " << pr3.first->first << " " << pr3.first->second << " " << pr3.second->first << " " << pr3.second->second << std::endl;
+	if (pr1.first != mp2.end() && pr1.second != mp2.end())
+		std::cout << "pr1: " << pr1.first->first << " " << pr1.first->second << " " << pr1.second->first << " " << pr1.second->second << std::endl;
+	if (pr2.first != mp2.end() && pr2.second != mp2.end())
+		std::cout << "pr2: " << pr2.first->first << " " << pr2.first->second << " " << pr2.second->first << " " << pr2.second->second << std::endl;
+	if (pr3.first != mp2.end() && pr3.second != mp2.end())
+		std::cout << "pr3: " << pr3.first->first << " " << pr3.first->second << " " << pr3.second->first << " " << pr3.second->second << std::endl;
 
 	std::cout.rdbuf(origin);
 	ofs.close();
@@ -452,7 +466,6 @@ int main(int ac, char *av[])
 	(void)ac;
 	(void)av;
 	main2();
-	std::string cmd = "leaks " + std::string(av[0]) + " > leaks.txt 2>&1";
-	system(cmd.c_str());
+	system("leaks ft_container > leaks.txt");
 	return 0;
 }
