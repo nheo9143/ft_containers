@@ -2,6 +2,7 @@
 # define UTILS_HPP
 
 # include "iterator.hpp"
+# include "pair.hpp"
 
 namespace ft
 {
@@ -98,6 +99,12 @@ namespace ft
 
 	template<>
 	struct is_integral<unsigned long> {static const bool value = true;};
+
+	template <typename T1, typename T2>
+	void printPair(const ft::pair<T1, T2>& pr)
+	{
+		std::cout << "first: " << pr.first << " second: " << pr.second << std::endl;
+	};
 }
 
 #endif

@@ -71,13 +71,6 @@ namespace ft
 	{
 		return (pair<T1, T2>(x, y));
 	};
-
-	//printPair
-	template <typename T1, typename T2>
-	void printPair(const pair<T1, T2>& pr)
-	{
-		std::cout << "first: " << pr.first << " second: " << pr.second << std::endl;
-	};
 }
 
 #endif
