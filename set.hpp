@@ -1,7 +1,7 @@
 #ifndef SET_HPP
 # define SET_HPP
 
-# include "tree.hpp"
+# include "red_black_tree.hpp"
 # include "utils.hpp"
 #include "tree_iterator.hpp"
 # include <memory>
@@ -22,18 +22,18 @@ namespace ft
 			typedef typename allocator_type::const_reference	const_reference;
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
-			typedef typename allocator_type::difference_type	difference_type;
-			typedef typename allocator_type::size_type			size_type;
+			typedef size_t										size_type;
+			typedef ptrdiff_t									difference_type;
 
 			typedef ft::tree_const_iterator<value_type>			iterator;
-			typedef ft::tree_const_iterator<value_type>		const_iterator;
-			typedef ft::reverse_iterator<iterator>			reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+			typedef ft::tree_const_iterator<value_type>			const_iterator;
+			typedef ft::reverse_iterator<iterator>				reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 		private:
-			tree<value_type, key_compare, allocator_type>	_tree;
-			key_compare										_comp;
-			allocator_type									_a;
+			ft::red_black_tree<value_type, key_compare, allocator_type>	_tree;
+			key_compare													_comp;
+			allocator_type												_a;
 
 		public:
 			explicit set(const key_compare& comp = key_compare(), const allocator_type& a = allocator_type()) : _tree(value_compare(comp)), _comp(comp), _a(a) {}

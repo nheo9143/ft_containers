@@ -3,7 +3,7 @@
 
 # include "utils.hpp"
 # include "pair.hpp"
-# include "tree.hpp"
+# include "red_black_tree.hpp"
 # include <memory>
 
 namespace ft
@@ -22,8 +22,8 @@ namespace ft
 			typedef typename allocator_type::const_reference	const_reference;
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
-			typedef typename allocator_type::difference_type	difference_type;
-			typedef typename allocator_type::size_type			size_type;
+			typedef size_t		size_type;
+			typedef ptrdiff_t	difference_type;
 
 			typedef ft::tree_iterator<value_type>				iterator;
 			typedef ft::tree_const_iterator<value_type>			const_iterator;
@@ -44,9 +44,9 @@ namespace ft
 			};
 
 		private:
-			tree<value_type, value_compare, allocator_type>			_tree;
-			key_compare												_comp;
-			allocator_type											_a;
+			ft::red_black_tree<value_type, value_compare, allocator_type>		_tree;
+			key_compare															_comp;
+			allocator_type														_a;
 		
 		public:
 			explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(value_compare(comp)), _comp(comp), _a(alloc) {};
@@ -54,7 +54,7 @@ namespace ft
 			template <typename InputIterator>
 			map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& a = allocator_type()) : _tree(value_compare(comp)), _comp(comp), _a(a) { insert(first, last); };
 			explicit map(const map& x) : _tree(x._tree), _comp(x._comp), _a(x._a) {};
-			~map() {};
+			virtual ~map() {};
 
 			map& operator=(const map& x)
 			{
@@ -79,17 +79,13 @@ namespace ft
 
 			mapped_type& operator[](const key_type& k)
 			{
-				iterator it = lower_bound(k);
-				if (it == end() || _comp(k, (*it).first))
-					it = insert(it, value_type(k, mapped_type()));
+				iterator it = insert(it, value_type(k, mapped_type()));
 				return (*it).second;
 			};
 
 			ft::pair<iterator, bool> insert(const value_type& val)
 			{
-				ft::pair<iterator, bool> ret;
-				ret = _tree.insert(val);
-				return ret;
+				return _tree.insert(val);
 			};
 
 			iterator insert(iterator position, const value_type& val)

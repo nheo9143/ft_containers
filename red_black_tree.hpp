@@ -4,13 +4,13 @@
 # include "utils.hpp"
 # include "pair.hpp"
 # include "tree_iterator.hpp"
-# include "iterator.hpp"
 # include "node.hpp"
+# include <memory>
 
 namespace ft
 {
 	template <typename T, typename Compare, typename Alloc = std::allocator<T> >
-	class tree
+	class red_black_tree
 	{
 		private:
 			typedef node<T>		t_node;
@@ -28,10 +28,11 @@ namespace ft
 			typedef typename allocator_type::const_reference	const_reference;
 			typedef size_t		size_type;
 			typedef ptrdiff_t	difference_type;
-			typedef ft::tree_iterator<value_type>	iterator;
-			typedef ft::tree_const_iterator<value_type>	const_iterator;
-			typedef ft::reverse_iterator<iterator>	reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+
+			typedef ft::tree_iterator<value_type>				iterator;
+			typedef ft::tree_const_iterator<value_type>			const_iterator;
+			typedef ft::reverse_iterator<iterator>				reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 		private:
 			node_ptr		_root;
@@ -41,7 +42,7 @@ namespace ft
 			node_allocator	_alloc;
 
 		public:
-			explicit tree(const value_compare& comp, const allocator_type& alloc = allocator_type()) : _root(0), _end(0), _size(0), _comp(comp), _alloc(alloc) {
+			explicit red_black_tree(const value_compare& comp, const allocator_type& alloc = allocator_type()) : _root(0), _end(0), _size(0), _comp(comp), _alloc(alloc) {
 				try {
 					_end = _alloc.allocate(1);
 				} catch(...) {
@@ -57,7 +58,7 @@ namespace ft
 			}
 
 			template <class InputIterator>
-			tree(InputIterator first, InputIterator last, const value_compare& comp, const allocator_type& alloc = allocator_type()) : _root(0), _end(0), _size(0), _comp(comp), _alloc(alloc) {
+			red_black_tree(InputIterator first, InputIterator last, const value_compare& comp, const allocator_type& alloc = allocator_type()) : _root(0), _end(0), _size(0), _comp(comp), _alloc(alloc) {
 				try {
 					_end = _alloc.allocate(1);
 				} catch(...) {
@@ -72,7 +73,7 @@ namespace ft
 				insert(first, last);
 			}
 
-			tree(const tree& ref) : _root(0), _end(0), _size(0), _comp(ref._comp), _alloc(ref._alloc) {
+			red_black_tree(const red_black_tree& ref) : _root(0), _end(0), _size(0), _comp(ref._comp), _alloc(ref._alloc) {
 				try {
 					_end = _alloc.allocate(1);
 				} catch(...) {
@@ -88,13 +89,13 @@ namespace ft
 				insert(ref.begin(), ref.end());
 			}
 
-			virtual ~tree() {
+			virtual ~red_black_tree() {
 				clear();
 				_alloc.destroy(_end);
 				_alloc.deallocate(_end, 1);
 			}
 
-			tree&	operator=(const tree& ref) {
+			red_black_tree&	operator=(const red_black_tree& ref) {
 				if (this != &ref) {
 					clear();
 					_comp = ref._comp;
@@ -169,7 +170,7 @@ namespace ft
 				return (*it);
 			}
 
-			void	swap(tree& ref) {
+			void	swap(red_black_tree& ref) {
 				ft::swap(_root, ref._root);
 				ft::swap(_end, ref._end);
 				ft::swap(_size, ref._size);
