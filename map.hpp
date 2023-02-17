@@ -79,7 +79,8 @@ namespace ft
 
 			mapped_type& operator[](const key_type& k)
 			{
-				iterator it = insert(it, value_type(k, mapped_type()));
+				iterator it = 0;
+				it = insert(it, value_type(k, mapped_type()));
 				return (*it).second;
 			};
 
