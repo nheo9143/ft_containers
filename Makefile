@@ -6,7 +6,7 @@ FT_SRCS = ft_container.cpp
 STD_SRCS = std_container.cpp
 TIME_SRCS = time_test.cpp
 INCLUDES = -I./
-LOGS = ./logs
+LOGS = ./logs leaks.txt
 
 FT_OBJS = $(FT_SRCS:.cpp=.o)
 STD_OBJS = $(STD_SRCS:.cpp=.o)
