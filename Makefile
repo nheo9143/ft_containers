@@ -12,7 +12,7 @@ FT_OBJS = $(FT_SRCS:.cpp=.o)
 STD_OBJS = $(STD_SRCS:.cpp=.o)
 TIME_OBJS = $(TIME_SRCS:.cpp=.o)
 
-OBJS = $(FT_OBJS) $(STD_OBJS)
+OBJS = $(FT_OBJS) $(STD_OBJS) $(TIME_OBJS)
 
 all : $(FT_CONTAINER) $(STD_CONTAINER) $(TIME_TEST)
 
@@ -29,7 +29,7 @@ clean :
 		rm -f $(OBJS)
 
 fclean : clean
-		rm -f $(FT_CONTAINER) $(STD_CONTAINER)
+		rm -f $(FT_CONTAINER) $(STD_CONTAINER) $(TIME_TEST)
 		rm -rf $(LOGS)
 
 re :
