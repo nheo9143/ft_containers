@@ -53,7 +53,7 @@ namespace ft
 
 			template <typename InputIterator>
 			map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& a = allocator_type()) : _tree(value_compare(comp)), _comp(comp), _a(a) { insert(first, last); };
-			explicit map(const map& x) : _tree(x._tree), _comp(x._comp), _a(x._a) {};
+			map(const map& x) : _tree(x._tree), _comp(x._comp), _a(x._a) {};
 			virtual ~map() {};
 
 			map& operator=(const map& x)
@@ -187,7 +187,7 @@ namespace ft
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator<(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
 	{
-		return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	};
 
 	template <class Key, class T, class Compare, class Alloc>

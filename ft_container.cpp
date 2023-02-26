@@ -77,6 +77,12 @@ int main2()
 	std::cout << "v1.size() = " << v1.size() << std::endl;
 	v1.insert(v1.begin(), 4, 5);
 	std::cout << "v1.size() = " << v1.size() << std::endl;
+	v1.insert(v1.begin(), v2.begin(), v2.end());
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+	v1.insert(v1.begin(), v2.begin(), v2.end());
+	std::cout << "v1.size() = " << v1.size() << std::endl;
+	v1.insert(v1.begin(), v1.begin(), v1.end());
+	std::cout << "v1.size() = " << v1.size() << std::endl;
 
 	/* erase test */
 	std::cout << std::endl << "---------------------erase test---------------------" << std::endl;

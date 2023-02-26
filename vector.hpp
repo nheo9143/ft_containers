@@ -20,10 +20,10 @@ namespace ft
 			typedef typename allocator_type::difference_type	difference_type;
 			typedef typename allocator_type::size_type			size_type;
 
-			typedef typename ft::random_access_iterator<pointer>		iterator;
-			typedef typename ft::random_access_iterator<const_pointer>	const_iterator;
-			typedef typename ft::reverse_iterator<iterator>				reverse_iterator;
-			typedef typename ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+			typedef ft::random_access_iterator<pointer>			iterator;
+			typedef ft::random_access_iterator<const_pointer>	const_iterator;
+			typedef ft::reverse_iterator<iterator>				reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 		private:
 			pointer			_begin;
@@ -74,7 +74,7 @@ namespace ft
 					_a.deallocate(_begin, n);
 				}
 			};
-			explicit vector(const vector& x) : _a(x._a)
+			vector(const vector& x) : _a(x._a)
 			{
 				try {
 					_begin = _a.allocate(x._end - x._begin);
@@ -305,6 +305,7 @@ namespace ft
 				try {
 					_a.construct(_end++, val);
 				} catch (...) {
+					_end--;
 					return ;
 				}
 			};
@@ -323,16 +324,20 @@ namespace ft
 					return position;
 				}
 				size_type i = 0;
+				size_type j = 0;
 				try {
 					for (; i < to_pos; i++)
 						_a.construct(tmp + i, _begin[i]);
-					_a.construct(tmp + to_pos, val);
+					for (; j < 1; j++)
+						_a.construct(tmp + to_pos + j, val);
 					for (; i < origin_size; i++)
 						_a.construct(tmp + i + 1, _begin[i]);
 				} catch(...) {
 					for (; i; i--)
-						_a.destroy(tmp + i);
-					_a.deallocate(tmp, capacity());
+						_a.destroy(tmp + i + j);
+					for (; j; j--)
+						_a.destroy(tmp + j);
+					_a.deallocate(tmp, new_cap);
 					return position;
 				}
 				clear();
@@ -359,17 +364,13 @@ namespace ft
 					for (; i < to_pos; i++)
 						_a.construct(tmp + i, _begin[i]);
 					for (; j < n; j++)
-						_a.construct(tmp + j + to_pos, val);
+						_a.construct(tmp + i, val);
 					for (; i < origin_size; i++)
 						_a.construct(tmp + i + n, _begin[i]);
 				} catch(...) {
-					for (; i; i--)
-						_a.destroy(tmp + i + j);
-					for (; j; j--)
-						_a.destroy(tmp + j);
-					_a.deallocate(tmp, origin_size + n);
+					_a.deallocate(tmp, new_cap);
 					return ;
-				}				
+				}
 				clear();
 				_a.deallocate(_begin, _end_cap - _begin);
 				_begin = tmp;
@@ -404,7 +405,7 @@ namespace ft
 						_a.destroy(tmp + i + j);
 					for (; j; j--)
 						_a.destroy(tmp + j);
-					_a.deallocate(tmp, capacity());
+					_a.deallocate(tmp, new_cap);
 					return ;
 				}
 				clear();
@@ -470,7 +471,7 @@ namespace ft
 
 	template <class T, class Alloc>
 	bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-		return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	}
 
 	template <class T, class Alloc>
